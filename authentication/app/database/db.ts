@@ -1,19 +1,31 @@
-import SQLite from "react-native-sqlite-storage";
+import * as SQLite from "expo-sqlite";
 
-SQLite.enablePromise(true);
+// Function to get the database instance
+let dbInstance: SQLite.SQLiteDatabase | null = null;
 
-const db = SQLite.openDatabase({ name: "authApp.db", location: "default" });
-
-export const initDB = async () => {
-  const database = await db;
-  await database.executeSql(
-    `CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT UNIQUE,
-      password TEXT
-    );`
-  );
-  return database;
+export const getDatabase = async (): Promise<SQLite.SQLiteDatabase> => {
+  if (!dbInstance) {
+    dbInstance = await SQLite.openDatabaseAsync("authApp.db");
+  }
+  return dbInstance;
 };
 
-export default db;
+export const initDB = async (): Promise<SQLite.SQLiteDatabase> => {
+  try {
+    const database = await getDatabase();
+    await database.execAsync(
+      `CREATE TABLE IF NOT EXISTS users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT UNIQUE,
+          password TEXT
+        );`
+    );
+    return database;
+  } catch (error) {
+    console.error("Error initializing database:", error);
+    throw error;
+  }
+};
+
+// Remove the default export since it's not needed
+// You can import { getDatabase, initDB } from './database/db' instead
