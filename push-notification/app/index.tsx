@@ -4,7 +4,7 @@ import * as Notifications from "expo-notifications";
 import {
   registerForPushNotificationsAsync,
   schedulePushNotification,
-} from "./NotificationService";
+} from "./services/NotificationService";
 
 export default function App() {
   useEffect(() => {

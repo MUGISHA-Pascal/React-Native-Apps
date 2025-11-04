@@ -7,6 +7,8 @@ Notifications.setNotificationHandler({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
+    shouldShowBanner: true, // Controls if notification shows as a banner
+    shouldShowList: true, // Controls if notification shows in notification center
   }),
 });
 
@@ -40,6 +42,6 @@ export const schedulePushNotification = async () => {
       body: "This is a test notification!",
       sound: true,
     },
-    trigger: { seconds: 5 },
+    trigger: { seconds: 5, type: "timeInterval" as const },
   });
 };
